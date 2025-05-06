@@ -1,6 +1,8 @@
 import tkinter as tk
 from tkinter import ttk
 from tkinter import messagebox
+import webbrowser
+import tkinter.font as tkFont
 import miniupnpc
 import socket
 import threading
@@ -212,7 +214,7 @@ def remove_port_mapping(upnp_instance, external_port, protocol):
 class UPnPApp(tk.Tk):
     def __init__(self):
         super().__init__()
-        self.title("Dandy's UPnP Port Mapper - v25.5.5")
+        self.title("Dandy's UPnP Port Mapper - v25.5.5b")
         # Increased height slightly to accommodate the list
         self.geometry("450x550") 
         self.resizable(True, True)
@@ -320,6 +322,31 @@ class UPnPApp(tk.Tk):
         main_frame.columnconfigure(1, weight=1) 
         main_frame.rowconfigure(7, weight=1) # Status text expands
         main_frame.rowconfigure(9, weight=2) # Mapping list expands more
+
+        # Add a row for the links at the bottom (row 10)
+        main_frame.rowconfigure(10, weight=0) # Links row doesn't need to expand much
+
+        # --- Footer Links (Row 10) --- ADDED SECTION
+        link_frame = ttk.Frame(main_frame)
+        link_frame.grid(row=10, column=0, columnspan=4, sticky=(tk.W, tk.E), pady=(10, 5), padx=5)
+
+        # Create an underlined font for links
+        link_font = tkFont.Font(family="TkDefaultFont", size=9, underline=False)
+
+        github_label = ttk.Label(link_frame, text="djdandy", foreground="blue", cursor="hand2", font=link_font)
+        github_label.pack(side=tk.LEFT, padx=5)
+        github_label.bind("<Button-1>", self.open_github)
+
+        website_label = ttk.Label(link_frame, text="djdandy.github.io", foreground="blue", cursor="hand2", font=link_font)
+        website_label.pack(side=tk.RIGHT, padx=5)
+        website_label.bind("<Button-1>", self.open_personal_page)
+
+    # --- Link Click Handlers --- ADDED METHODS
+    def open_github(self, event=None):
+        webbrowser.open_new_tab("https://github.com/djdandy")
+
+    def open_personal_page(self, event=None):
+        webbrowser.open_new_tab("https://djdandy.github.io")
 
     # Considering adding a togglable sync for external and internal ports, for now, just copy/paste
     # def sync_ports(self, *args):
